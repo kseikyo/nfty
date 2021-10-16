@@ -1,24 +1,61 @@
-import { useWeb3React } from '@web3-react/core'
-import Head from 'next/head'
-import { injected } from '../components/wallet/connectors'
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { ethers, providers } from "ethers";
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import Web3Modal from 'web3modal';
 
-export default function Home() {
-  const { active, account, library, connector, activate, deactivate } = useWeb3React()
 
-  async function connect() {
-    try {
-      await activate(injected)
-    } catch (ex) {
-      console.log(ex)
+export default function Home(props) {
+  const [web3Modal, setWeb3Modal] = useState(null)
+  const [address, setAddress] = useState("")
+
+  useEffect(() => {
+    const providerOptions = {
+      walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+          infuraId: process.env.INFURA_ID,
+        }
+      },
+    };
+
+    const newWeb3Modal = new Web3Modal({
+      cacheProvider: true, // very important
+      network: "mainnet",
+      providerOptions,
+    });
+
+    setWeb3Modal(newWeb3Modal)
+  }, [])
+
+  useEffect(() => {
+    // connect automatically and without a popup if user is already connected
+    if (web3Modal && web3Modal.cachedProvider) {
+      connectWallet()
     }
+  }, [web3Modal])
+
+
+  async function connectWallet() {
+    const provider = await web3Modal.connect();
+
+    addListeners(provider);
+
+    const ethersProvider = new providers.Web3Provider(provider)
+    const userAddress = await ethersProvider.getSigner().getAddress()
+    setAddress(userAddress)
   }
 
-  async function disconnect() {
-    try {
-      deactivate()
-    } catch (ex) {
-      console.log(ex)
-    }
+  async function addListeners(provider) {
+
+    provider.on("accountsChanged", (accounts) => {
+      window.location.reload()
+    });
+
+    // Subscribe to chainId change
+    provider.on("chainChanged", (chainId) => {
+      window.location.reload()
+    });
   }
 
 
@@ -43,15 +80,17 @@ export default function Home() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
         <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
           <p className="mb-5">
-            <button onClick={connect}
+            <button
+              onClick={connectWallet}
               type="submit"
               className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
-              Connect to MetaMask
+              Connect your wallet
             </button>
           </p>
           <p className="text-center">
-            {active ? <span>Connected with <b>{account}</b></span> : <span> No wallet currently connected</span>}
+            <span>No wallet currently connected</span>
+            <span>{address}</span>
           </p>
         </div>
       </div>
