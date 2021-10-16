@@ -79,21 +79,30 @@ export default function Home(props) {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
         <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-          <p className="mb-5">
-            <button
-              onClick={connectWallet}
-              type="submit"
-              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            >
-              Connect your wallet
-            </button>
-          </p>
+          {address.length <= 0 &&
+            <p className="mb-5">
+
+              <button
+                onClick={connectWallet}
+                type="submit"
+                className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >
+                Connect your wallet
+              </button>
+            </p>
+          }
+
+          {address.length > 0 &&
+            <p className="text-center">
+              <b>You're connected!</b>
+            </p>
+          }
+
           <p className="text-center">
-            <span>No wallet currently connected</span>
-            <span>{address}</span>
+            {address ? <span>{address}</span> : <span>No wallet currently connected</span>}
           </p>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
