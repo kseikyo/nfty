@@ -1,14 +1,16 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ethers, providers } from "ethers";
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Web3Modal from 'web3modal';
 import Layout, { siteTitle } from '../components/layout'
+import GlobalContext from '../context/global'
 
 
 export default function Home(props) {
   const [web3Modal, setWeb3Modal] = useState(null)
-  const [address, setAddress] = useState("")
+  //const [address, setAddress] = useState("")
+  const global = useContext(GlobalContext)
 
   useEffect(() => {
     const providerOptions = {
@@ -44,7 +46,11 @@ export default function Home(props) {
 
     const ethersProvider = new providers.Web3Provider(provider)
     const userAddress = await ethersProvider.getSigner().getAddress()
-    setAddress(userAddress)
+    //setAddress(userAddress)
+
+    global.update({
+      address: userAddress
+    })
   }
 
   async function addListeners(provider) {
@@ -76,7 +82,7 @@ export default function Home(props) {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
           <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-            {address.length <= 0 &&
+            {global.address == null &&
               <p className="mb-5">
 
                 <button
@@ -89,14 +95,14 @@ export default function Home(props) {
               </p>
             }
 
-            {address.length > 0 &&
+            {global.address != null &&
               <p className="text-center">
                 <b>You're connected!</b>
               </p>
             }
 
             <p className="text-center">
-              {address ? <span>{address}</span> : <span>No wallet currently connected</span>}
+              {global.address ? <span>{global.address}</span> : <span>No wallet currently connected</span>}
             </p>
           </div>
         </div>
