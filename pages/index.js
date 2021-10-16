@@ -1,12 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
-import axios from 'axios'
 import Head from 'next/head'
 import { injected } from '../components/wallet/connectors'
-
-await axios.post('/api/auth/login', {
-  address: await web3.getSigner().getAddress(),
-  signature: await web3.getSigner().signMessage(message),
-})
 
 export default function Home() {
   const { active, account, library, connector, activate, deactivate } = useWeb3React()
