@@ -3,6 +3,7 @@ import { ethers, providers } from "ethers";
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Web3Modal from 'web3modal';
+import Layout, { siteTitle } from '../components/layout'
 
 
 export default function Home(props) {
@@ -60,49 +61,46 @@ export default function Home(props) {
 
 
   return (
-    <div className="flex flex-col justify-center min-h-screen py-12 bg-gray-50 sm:px-6 lg:px-12">
+    <Layout home>
       <Head>
         <title>NFTY</title>
-        <link rel="icon" href="/favicon.ico" />
-        <script src="https://kit.fontawesome.com/d36e6b2199.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
-
-
-      <div className="sm:mx-auto sm:w-full sm:max-w-lg">
-        <p className="text-center text-green-500 text-8xl"><i className="fa-duotone fa-poo-storm"></i></p>
-        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">NFTY</h2>
-        <p className="mt-2 text-sm text-center text-gray-600">
-          Tools for your NFTs
-        </p>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
-        <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-          {address.length <= 0 &&
-            <p className="mb-5">
-
-              <button
-                onClick={connectWallet}
-                type="submit"
-                className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                Connect your wallet
-              </button>
-            </p>
-          }
-
-          {address.length > 0 &&
-            <p className="text-center">
-              <b>You're connected!</b>
-            </p>
-          }
-
-          <p className="text-center">
-            {address ? <span>{address}</span> : <span>No wallet currently connected</span>}
+      <div className="flex flex-col justify-center min-h-screen py-12 bg-gray-50 sm:px-6 lg:px-12">
+        <div className="sm:mx-auto sm:w-full sm:max-w-lg">
+          <p className="text-center text-green-500 text-8xl"><i className="fa-duotone fa-poo-storm"></i></p>
+          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">NFTY</h2>
+          <p className="mt-2 text-sm text-center text-gray-600">
+            Tools for your NFTs
           </p>
         </div>
+
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+          <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+            {address.length <= 0 &&
+              <p className="mb-5">
+
+                <button
+                  onClick={connectWallet}
+                  type="submit"
+                  className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  Connect your wallet
+                </button>
+              </p>
+            }
+
+            {address.length > 0 &&
+              <p className="text-center">
+                <b>You're connected!</b>
+              </p>
+            }
+
+            <p className="text-center">
+              {address ? <span>{address}</span> : <span>No wallet currently connected</span>}
+            </p>
+          </div>
+        </div>
       </div>
-    </div >
+    </Layout>
   )
 }
