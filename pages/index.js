@@ -33,7 +33,7 @@ export default function Home() {
 
 
       <div className="sm:mx-auto sm:w-full sm:max-w-lg">
-        <p className="text-center text-green-500 text-8xl"><i class="fa-duotone fa-poo-storm"></i></p>
+        <p className="text-center text-green-500 text-8xl"><i className="fa-duotone fa-poo-storm"></i></p>
         <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">NFTY</h2>
         <p className="mt-2 text-sm text-center text-gray-600">
           Tools for your NFTs
